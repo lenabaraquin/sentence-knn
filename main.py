@@ -198,6 +198,12 @@ def main():
         raise KeyError(f"Colonne '{text_col}' introuvable dans le dataset. Colonnes: {dataset.column_names}")
 
     dataset = dataset.filter(lambda x: isinstance(x.get(text_col, ""), str) and len(x[text_col]) > 15)
+    dataset = dataset.remove_columns("id")
+    dataset = dataset.map(
+        lambda samples, indices: {"id": indices},
+        with_indices=True,
+        batched=True
+    )
     print("→ Dataset filtré.")
 
     # Si les embeddings existent déjà, on évite de recalculer
@@ -227,16 +233,6 @@ def main():
             batch_size=args.batch_size
         )
         print("→ Embeddings calculés.")
-
-    # Assurer une colonne id séquentielle
-    if "id" in embeddings_dataset.column_names:
-        pass
-    else:
-        embeddings_dataset = embeddings_dataset.map(
-            lambda samples, indices: {"id": indices},
-            with_indices=True,
-            batched=True
-        )
 
     # Sauvegarde sur disque (dossier)
     if not(already_computed):
