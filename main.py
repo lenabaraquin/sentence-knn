@@ -253,9 +253,10 @@ def main():
 
     k = min(args.k, embs_tensor.size(0))
     values, indices = chebyshev_knn(embs_tensor, query_emb, k)
-    print(f"Indices des {k} plus proches: {indices.tolist()}")
-    print(f"Distances correspondantes: {values.tolist()}")
-    print(from_id_return_sentence(indices.tolist(), embeddings_dataset, args.text_field))
-
+    
+    knn_sentences = from_id_return_sentence(indices.tolist(), embeddings_dataset, args.text_field)
+    for i in range(k):
+        print(f"rang : {i}\t distance : {values[i]}\t indice : {indices[i]}\n\t {knn_sentences[i]}\n")
+        
 if __name__ == "__main__":
     main()
