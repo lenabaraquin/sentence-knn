@@ -9,7 +9,7 @@ BEGIN {
   n = split($0, a, /\.[ \t]*/)
   for (i = 1; i <= n; i++) {
     if (length(a[i]) > 0) {
-      if (NR != 1) print ",\n" # Bricolage pour ne pas intégrer le séparateur "," à la dernière ligne du fichier
+      if (i != 1) print ",\n" # Bricolage pour ne pas intégrer le séparateur "," à la dernière ligne du fichier
         else print ""
       gsub(/"/, "\\\"", a[i])
       printf "  \{\"id\": \"%d\"\, \"text\": \"%s\"\}", ++c, a[i]
